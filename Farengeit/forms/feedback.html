@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Связаться с нами - Фаренгейт</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container d-flex align-items-center">
+            <a class="navbar-brand me-4" href="../index.html">
+                <img src="../media/logo.png" alt="Логотип" height="45" class="d-inline-block align-text-top">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-5">
+                    <li class="nav-item icon"><a class="nav-link" href="../index.html"><i class="bi bi-compass"></i> Главная</a></a></li>
+                    <li class="nav-item icon"><a class="nav-link" href="../catalog.html"><i class="bi bi-telephone"></i> Каталог</a></li>
+                    <li class="nav-item icon"><a class="nav-link" href="login.html"><i class="bi bi-box-arrow-in-right"></i> Вход</a></li>
+                    <li class="nav-item icon"><a class="nav-link" href="register.html"><i class="bi bi-person-plus"></i> Регистрация</a></li>
+                    <li> <a href="tel:+74954778667">+7 (495) 477-86-67</a></li>
+                    <li class="nav-item me-4 email">info+10020738@farengeit-online.ru</li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Заголовок страницы -->
+    <header class="bg-light text-center py-2">
+        <div class="container">
+            <h1>Связаться с нами</h1>
+        </div>
+    </header>
+
+    <!-- Форма обратной связи -->
+    <section class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h2>Напишите нам</h2>
+                <form id="feedbackForm">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Ваше имя</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Введите ваше имя" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Ваш Email</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Введите ваш email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Сообщение</label>
+                        <textarea class="form-control" id="message" name="message" rows="5" placeholder="Введите ваше сообщение" required></textarea>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Отправить сообщение</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->  
+    <BR>
+        <footer class="text-center py-3">
+            <div class="container">
+                <p>&copy; 2024 Магазин сантехники "Фаренгейт". Все права защищены.</p>
+            </div>
+        </footer>
+
+    <script>
+        document.getElementById('feedbackForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+
+            if (!name || !email || !message) {
+                alert('Пожалуйста, заполните все поля.');
+                return;
+            }
+
+            fetch('http://localhost:9567/feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    Name: name,
+                    Email: email,
+                    Message: message
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка при отправке сообщения.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('Ваше сообщение отправлено успешно!');
+                document.getElementById('feedbackForm').reset();
+            })
+            .catch(error => {
+                alert('Произошла ошибка, попробуйте позже.');
+            });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
