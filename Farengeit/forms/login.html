@@ -75,12 +75,11 @@
             const password = document.getElementById('password').value;
     
             // Делаем POST-запрос к API
-            fetch('http://localhost:9567/users/sign-in', {
+            fetch('http://localhost:8080/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                credentials: 'include',
                 body: JSON.stringify({
                     Email: email,
                     Password: password

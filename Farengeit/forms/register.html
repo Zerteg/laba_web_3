@@ -74,18 +74,18 @@
             event.preventDefault(); // Отключаем стандартное поведение формы (перезагрузку)
     
             // Получаем значения полей
-            const name = document.getElementById('name').value;
+            const username = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
     
             // Делаем POST-запрос к API для регистрации
-            fetch('http://localhost:9567/users/sign-up', {
+            fetch('http://localhost:8080/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    Name: name,
+                    Username: username,
                     Email: email,
                     Password: password
                 })
