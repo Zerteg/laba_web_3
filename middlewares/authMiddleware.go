@@ -12,22 +12,25 @@ var DB *gorm.DB
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		// Получаем токен из заголовка Authorization
 		tokenString := c.GetHeader("Authorization")
 		if tokenString == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization token not provided"})
+			// Если токен не предоставлен, отправляем ошибку
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Токен аутентификации не предоставлен"})
 			c.Abort()
 			return
 		}
 
-		// Проверка токена
+		// Проверка токена JWT
 		userID, err := utils.ValidateJWT(tokenString)
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid or expired token"})
+			// Если токен недействителен или истек, отправляем ошибку
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Недействительный или истекший токен"})
 			c.Abort()
 			return
 		}
 
-		// Передача userID для использования в обработчике
+		// Передача userID для использования в других обработчиках
 		c.Set("userID", userID)
 		c.Next()
 	}

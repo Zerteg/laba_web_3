@@ -96,3 +96,9 @@ func GetUserProfile(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"profile": user})
 }
+
+func CheckSession(c *gin.Context) {
+	// Если middleware AuthMiddleware пропустил запрос,
+	// значит, сессия действительна.
+	c.JSON(http.StatusOK, gin.H{"message": "Session is valid"})
+}
