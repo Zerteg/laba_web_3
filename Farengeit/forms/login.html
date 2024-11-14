@@ -69,11 +69,11 @@
     <script>
         document.getElementById('loginForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Отключаем стандартное поведение формы (перезагрузку)
-    
+
             // Получаем значения полей
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-    
+
             // Делаем POST-запрос к API
             fetch('http://localhost:8080/login', {
                 method: 'POST',
@@ -91,7 +91,16 @@
                 }
                 return response.json();
             })
+
+
             .then(data => {
+
+                // Предположим, что сервер возвращает JWT токен
+                const jwtToken = data.token; // Токен из ответа
+
+                // Сохраняем токен в localStorage
+                localStorage.setItem('jwtToken', jwtToken);
+
                 // Вход успешен, перенаправляем пользователя на страницу каталога
                 window.location.href = '../catalog.html';
             })

@@ -2,11 +2,19 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"laba_web_3/controllers"
 	"laba_web_3/middlewares"
 )
 
+var DB *gorm.DB
+
 func RegisterAuthRoutes(router *gin.Engine) {
+
+	productController := &controllers.Controller{
+		DB: DB,
+	}
+
 	// Создаем подгруппу маршрутов для аутентификации
 	authRoutes := router.Group("/auth")
 
@@ -16,6 +24,11 @@ func RegisterAuthRoutes(router *gin.Engine) {
 	// Маршрут для входа
 	authRoutes.POST("/login", controllers.LoginUser)
 
-	// Пример защищенного маршрута, доступного только авторизованным пользователям
-	authRoutes.GET("/profile", middlewares.AuthMiddleware(), controllers.GetUserProfile)
+	// Группа маршрутов для защищенных ресурсов
+	protectedRoutes := router.Group("/protected")
+	protectedRoutes.Use(middlewares.AuthMiddleware()) // Применяем middleware
+
+	// Пример защищенного маршрута - просмотр карточек товаров
+	protectedRoutes.GET("/products", productController.GetProducts)
+
 }

@@ -58,6 +58,7 @@ func LoginUser(c *gin.Context) {
 	}
 	// Проверка существования пользователя
 	user, err := models.GetUserByEmail(middlewares.DB, input.Email)
+
 	if err != nil {
 		if err == sql.ErrNoRows {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
@@ -81,6 +82,7 @@ func LoginUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"token": token})
+
 }
 
 func GetUserProfile(c *gin.Context) {
@@ -95,10 +97,4 @@ func GetUserProfile(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"profile": user})
-}
-
-func CheckSession(c *gin.Context) {
-	// Если middleware AuthMiddleware пропустил запрос,
-	// значит, сессия действительна.
-	c.JSON(http.StatusOK, gin.H{"message": "Session is valid"})
 }

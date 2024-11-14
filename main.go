@@ -23,7 +23,7 @@ func SetupDatabase() {
 	}
 
 	// Миграция
-	DB.AutoMigrate(&models.User{})
+	DB.AutoMigrate(&models.User{}, &models.Product{})
 }
 
 func main() {
@@ -40,9 +40,24 @@ func main() {
 	SetupDatabase()
 	middlewares.DB = DB // сохраняем подключение к базе данных в мидлваре
 
+	// Создаем объект контроллера с доступом к DB
+	productController := &controllers.Controller{
+		DB: DB,
+	}
+
+	// Публичные маршруты
 	router.POST("/register", controllers.RegisterUser)
 	router.POST("/login", controllers.LoginUser)
-	router.GET("/profile", middlewares.AuthMiddleware(), controllers.GetUserProfile)
+
+	// Группа защищенных маршрутов
+	protectedRoutes := router.Group("/protected")
+	protectedRoutes.Use(middlewares.AuthMiddleware()) // добавляем AuthMiddleware
+
+	// Защищенный маршрут для карточек товаров
+	protectedRoutes.GET("/products", productController.GetProducts)
+
+	// Обработчик для статичных файлов (изображений)
+	protectedRoutes.Static("/media", "./media")
 
 	router.Run(":8080")
 }

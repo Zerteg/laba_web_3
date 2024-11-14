@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-var jwtKey = []byte("your_secret_key") // замените на секретный ключ
+var jwtKey = []byte("Authorization") // замените на секретный ключ
 
 // Создание JWT
 func GenerateJWT(userID uint) (string, error) {
@@ -30,6 +30,11 @@ func ValidateJWT(tokenString string) (uint, error) {
 		return 0, err
 	}
 
-	userID := uint(claims["userID"].(float64))
-	return userID, nil
+	// Извлечение userID как uint
+	userID, ok := claims["userID"].(float64)
+	if !ok {
+		return 0, err
+	}
+
+	return uint(userID), nil
 }
