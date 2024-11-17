@@ -48,7 +48,7 @@ func main() {
 	// Публичные маршруты
 	router.POST("/register", controllers.RegisterUser)
 	router.POST("/login", controllers.LoginUser)
-
+	router.POST("/feedback", controllers.FeedbackHandler)
 	// Группа защищенных маршрутов
 	protectedRoutes := router.Group("/protected")
 	protectedRoutes.Use(middlewares.AuthMiddleware()) // добавляем AuthMiddleware

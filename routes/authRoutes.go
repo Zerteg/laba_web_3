@@ -24,6 +24,9 @@ func RegisterAuthRoutes(router *gin.Engine) {
 	// Маршрут для входа
 	authRoutes.POST("/login", controllers.LoginUser)
 
+	// Добавляем маршрут для отправки отзыва
+	authRoutes.POST("/feedback", controllers.FeedbackHandler)
+
 	// Группа маршрутов для защищенных ресурсов
 	protectedRoutes := router.Group("/protected")
 	protectedRoutes.Use(middlewares.AuthMiddleware()) // Применяем middleware
