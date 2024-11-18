@@ -13,6 +13,16 @@ import (
 
 var db *gorm.DB
 
+// RegisterUser - метод для регистрации пользователя
+// @Summary User registration
+// @Description This endpoint allows a new user to register by providing username, email, and password
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param user body models.User true "User data"
+// @Success 200 {object} models.User
+// @Failure 400 {object} models.Error
+// @Router /register [post]
 func RegisterUser(c *gin.Context) {
 	var input models.User
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -50,6 +60,17 @@ func RegisterUser(c *gin.Context) {
 }
 
 // Функция для входа пользователя
+
+// LoginUser - метод для входа пользователя
+// @Summary User login
+// @Description This endpoint allows a user to log in with username and password
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param user body models.User true "Login credentials"
+// @Success 200 {object} models.User
+// @Failure 400 {object} models.Error
+// @Router /login [post]
 func LoginUser(c *gin.Context) {
 	var input models.LoginInput
 	if err := c.ShouldBindJSON(&input); err != nil {

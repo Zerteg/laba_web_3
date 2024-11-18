@@ -7,6 +7,11 @@ import (
 	"time"
 )
 
+// User - структура пользователя
+// @Description User object
+// @Param user body models.User true "User data"
+// @Success 200 {object} models.User
+// @Failure 400 {object} models.Error
 type User struct {
 	ID        uint `gorm:"primarykey"`
 	CreatedAt time.Time

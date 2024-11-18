@@ -8,12 +8,24 @@ import (
 	"gorm.io/gorm"
 )
 
-type Controller struct {
+type ProductController struct {
 	DB *gorm.DB
 }
 
 // Получить список товаров
-func (ctrl *Controller) GetProducts(c *gin.Context) {
+
+// GetProducts - Получить список товаров
+// @Summary Получить все товары
+// @Description Возвращает список всех товаров с изображениями
+// @Tags Products
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Success 200 {array} models.Product "Список товаров"
+// @Failure 401 {object} models.Error "Неавторизованный доступ"
+// @Failure 500 {object} models.Error "Ошибка сервера"
+// @Router /protected/products [get]
+func (ctrl *ProductController) GetProducts(c *gin.Context) {
 	var products []models.Product
 
 	if err := ctrl.DB.Find(&products).Error; err != nil {
