@@ -17,7 +17,14 @@ type User struct {
 	CreatedAt time.Time
 	Username  string `gorm:"not null" json:"username"`
 	Email     string `gorm:"unique;not null" json:"email"`
+	Phone     string `gorm:"size:11" json:"phone"`
 	Password  string `gorm:"not null" json:"password"`
+}
+
+// LoginInput структура для входных данных при регистрации
+type LoginInput struct {
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }
 
 // CreateUser создает нового пользователя в базе данных
@@ -57,10 +64,4 @@ func GetUserProfile(db *gorm.DB, userID string) (User, error) {
 		return User{}, result.Error
 	}
 	return user, nil
-}
-
-// LoginInput структура для входных данных при регистрации
-type LoginInput struct {
-	Email    string `json:"email" binding:"required"`
-	Password string `json:"password" binding:"required"`
 }

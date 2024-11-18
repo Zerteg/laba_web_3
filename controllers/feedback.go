@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"laba_web_3/middlewares"
 	"laba_web_3/models"
 	"net/http"
 )
@@ -38,11 +39,19 @@ func (ctrl *FeedbackController) FeedbackHandler(c *gin.Context) {
 		return
 	}
 
-	// Сохраняем в базу данных
-	if err := ctrl.DB.Create(&input).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Не удалось сохранить отзыв"})
-		return
+	//// Сохраняем в базу данных
+	//if err := ctrl.DB.Create(&input).Error; err != nil {
+	//	c.JSON(http.StatusInternalServerError, gin.H{"error": "Не удалось сохранить отзыв"})
+	//	return
+	//}
+
+	feedback := models.Feedback{
+		Name:    input.Name,
+		Email:   input.Email,
+		Message: input.Message,
 	}
+
+	models.CreateFeedback(middlewares.DB, &feedback)
 
 	fmt.Printf("Отзыв получен! Имя: %s, Почта: %s, Сообщение: %s\n", input.Name, input.Email, input.Message)
 

@@ -1,0 +1,167 @@
+basePath: /
+definitions:
+  models.Error:
+    description: Error object
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+    type: object
+  models.Feedback:
+    description: Feedback object
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      message:
+        type: string
+      name:
+        type: string
+    type: object
+  models.Product:
+    description: Product object
+    properties:
+      id:
+        type: integer
+      image_url:
+        type: string
+      title:
+        type: string
+    type: object
+  models.User:
+    description: User object
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API Server for Farengeit_shop Application
+  title: Farengeit API
+  version: "1.0"
+paths:
+  /feedback:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint allows a user to submit feedback
+      parameters:
+      - description: Feedback data
+        in: body
+        name: feedback
+        required: true
+        schema:
+          $ref: '#/definitions/models.Feedback'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Feedback'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Submit feedback
+      tags:
+      - Users
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint allows a user to log in with username and password
+      parameters:
+      - description: Login credentials
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: User login
+      tags:
+      - Users
+  /protected/products:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает список всех товаров с изображениями
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список товаров
+          schema:
+            items:
+              $ref: '#/definitions/models.Product'
+            type: array
+        "401":
+          description: Неавторизованный доступ
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Ошибка сервера
+          schema:
+            $ref: '#/definitions/models.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Получить все товары
+      tags:
+      - Products
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint allows a new user to register by providing username,
+        email, and password
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: User registration
+      tags:
+      - Users
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

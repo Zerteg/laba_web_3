@@ -76,6 +76,7 @@
             // Получаем значения полей
             const username = document.getElementById('name').value;
             const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone_number').value;
             const password = document.getElementById('password').value;
     
             // Делаем POST-запрос к API для регистрации
@@ -87,6 +88,7 @@
                 body: JSON.stringify({
                     Username: username,
                     Email: email,
+                    Phone: phone,
                     Password: password
                 })
             })

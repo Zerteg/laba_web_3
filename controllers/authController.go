@@ -47,6 +47,7 @@ func RegisterUser(c *gin.Context) {
 	user := models.User{
 		Username: input.Username,
 		Email:    input.Email,
+		Phone:    input.Phone,
 		Password: password_hash, // Хешированный пароль
 	}
 

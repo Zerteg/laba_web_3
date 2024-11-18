@@ -1,11 +1,22 @@
 package models
 
-// Feedback - структура для описания отзыва
-// @Description Структура отзыва, включает имя, email и сообщение пользователя
+import (
+	"gorm.io/gorm"
+	"time"
+)
 
+// Feedback - структура для хранения отзывов
+// @Description Feedback object
 type Feedback struct {
-	ID      uint   `json:"id" gorm:"primaryKey"`
-	Name    string `json:"name"`
-	Email   string `json:"email"`
-	Message string `json:"message"`
+	ID        uint      `gorm:"primaryKey" json:"id"`
+	CreatedAt time.Time `json:"created_at"`
+	Name      string    `gorm:"not null" json:"name"`
+	Email     string    `gorm:"not null" json:"email"`
+	Message   string    `gorm:"not null" json:"message"`
+}
+
+// CreateFeedback создает новый отзыв в базе данных
+func CreateFeedback(db *gorm.DB, feedback *Feedback) error {
+	result := db.Create(feedback)
+	return result.Error
 }
