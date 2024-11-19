@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина - Фаренгейт</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<!-- Навигация -->
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container d-flex align-items-center">
+        <a class="navbar-brand me-4" href="../index.html">
+            <img src="../media/logo.png" alt="Логотип" height="45" class="d-inline-block align-text-top">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-5">
+                <li class="nav-item icon"><a class="nav-link" href="../index.html"><i class="bi bi-compass"></i> Главная</a></li>
+                <li class="nav-item icon"><a class="nav-link" href="../catalog.html"><i class="bi bi-telephone"></i> Каталог</a></li>
+                <li class="nav-item icon"><a class="nav-link" href="login.html"><i class="bi bi-box-arrow-in-right"></i> Вход</a></li>
+                <li class="nav-item icon"><a class="nav-link" href="register.html"><i class="bi bi-person-plus"></i> Регистрация</a></li>
+                <li> <a href="tel:+74954778667">+7 (495) 477-86-67</a></li>
+                <li class="nav-item me-4 email">info+10020738@farengeit-online.ru</li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Корзина -->
+<section class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center mb-4">Корзина <i class="bi bi-cart"></i></h2>
+            <div id="cart-items" class="list-group mb-4">
+                <!-- Товары из localStorage будут добавлены сюда -->
+            </div>
+            <h3 class="text-end">Общая сумма: <span id="cart-total">0</span> ₽</h3>
+            <div class="d-grid gap-2 d-md-block text-end">
+                <button class="btn btn-danger" onclick="clearCart()">Очистить корзину</button>
+                <button class="btn btn-primary" onclick="checkout()">Оформить заказ</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Футер -->
+<footer class="text-center py-3">
+    <div class="container">
+        <p>&copy; 2024 Магазин сантехники "Фаренгейт". Все права защищены.</p>
+    </div>
+</footer>
+
+<script>
+    // Получение корзины из localStorage
+    function getCart() {
+        const cart = localStorage.getItem('cart');
+        return cart ? JSON.parse(cart) : [];
+    }
+
+    // Сохранение корзины в localStorage
+    function saveCart(cart) {
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    // Отображение корзины
+    function renderCart() {
+        const cartItems = document.getElementById('cart-items');
+        const cartTotal = document.getElementById('cart-total');
+        const cart = getCart();
+
+        // Очистка контейнера
+        cartItems.innerHTML = '';
+        let total = 0;
+
+        if (cart.length === 0) {
+            cartItems.innerHTML = '<p class="text-center">Корзина пуста.</p>';
+            cartTotal.textContent = '0';
+            return;
+        }
+
+        cart.forEach(item => {
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+
+            const listItem = document.createElement('div');
+            listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+            listItem.innerHTML = `
+                <div>
+                    <strong>${item.name}</strong> <small>(x${item.quantity})</small><br>
+                    <span>${item.price} ₽ / шт</span>
+                </div>
+                <div>
+                    <span class="text-success">${itemTotal} ₽</span>
+                    <button class="btn btn-sm btn-danger ms-3" onclick="removeFromCart(${item.id})">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            `;
+            cartItems.appendChild(listItem);
+        });
+
+        cartTotal.textContent = total.toFixed(2);
+    }
+
+    // Удаление товара из корзины
+    function removeFromCart(id) {
+        const cart = getCart();
+        const updatedCart = cart.filter(item => item.id !== id);
+        saveCart(updatedCart);
+        renderCart();
+    }
+
+    // Очистка корзины
+    function clearCart() {
+        localStorage.removeItem('cart');
+        renderCart();
+    }
+
+    // Оформление заказа
+    function checkout() {
+        alert('Заказ оформлен! Спасибо за покупку.');
+        clearCart();
+    }
+
+    // Отобразить корзину при загрузке страницы
+    document.addEventListener('DOMContentLoaded', renderCart);
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

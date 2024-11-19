@@ -314,7 +314,28 @@ footer p {
     }
 }
 
+.cart-button {
+    position: fixed;
+    bottom: 100px;
+    right: 50px;
+    width: 60px;
+    height: 60px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease-in-out;
+}
 
+.cart-button:hover {
+    background-color: rgba(0, 123, 255, 0.68);
+}
 
 
 
