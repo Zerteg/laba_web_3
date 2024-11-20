@@ -77,33 +77,3 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 	}
 }
-
-/*var store = sessions.NewCookieStore([]byte("SESSION_SECRET"))
-
-// SessionMiddleware для обработки сессий
-func SessionMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		// Получаем сессию из запроса
-		session, err := store.Get(c.Request, "session-name")
-		if err != nil {
-			log.Println("Error getting session:", err)
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
-			c.Abort()
-			return
-		}
-
-		// Проверяем, есть ли пользователь в сессии
-		if userID, ok := session.Values["userID"]; ok {
-			// Если есть, добавляем его в контекст запроса
-			c.Set("userID", userID)
-		} else {
-			// Если пользователя нет в сессии, отправляем ошибку
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "User not authenticated"})
-			c.Abort()
-			return
-		}
-
-		// Продолжаем выполнение запроса
-		c.Next()
-	}
-}*/

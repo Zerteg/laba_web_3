@@ -8,7 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <!-- Навигация -->
@@ -33,12 +32,24 @@
     </div>
 </nav>
 
+<!-- Хэдер с слайдером -->
+<header class="slider-header text-center py-3 mb-0">
+    <div class="slider">
+        <div class="slides">
+            <div class="slide">
+                <img src="media/slider1.png" alt="Slide 1">
+            </div>
+            <div class="slide">
+                <img src="media/slider2.png" alt="Slide 2">
+            </div>
+            <div class="slide">
+                <img src="media/slider3.png" alt="Slide 3">
+            </div>
+        </div>
+    </div>
+</header>
 
-
-
-
-<!-- Хэдер -->
-<header class="bg-light text-center py-3">
+<header class="bg-light text-center py-2">
     <div class="container">
         <h1>Магазин сантехники <k>Фаренгейт</k></h1>
         <p>Качественные решения для вашего дома</p>
@@ -50,11 +61,8 @@
 <section class="container my-5">
     <div class="section-card">
         <h2>О нас</h2>
-        <p>Магазин "Фаренгейт" предлагает широкий ассортимент сантехники для дома и офиса. Мы сотрудничаем с ведущими производителями, 
-            чтобы вы могли выбрать товары, отвечающие вашим требованиям по качеству и цене.</p> 
-        <pp>Компания Фаренгейт была основана в 2017 году и с тех пор занимается оптовыми и розничными продажами инженерных систем отопления, 
-            водоснабжения и водоотведения. Мы начали свою работу в Московском регионе, а наш центральный офис расположен в городе Королёв Московской области. 
-            Основной склад и пункт выдачи заказов находятся на 43-км МКАД, так же для удобства наших клиентов в Королёве имеется еще один пункт выдачи и офис.</pp>
+        <p>Магазин "Фаренгейт" предлагает широкий ассортимент сантехники для дома и офиса.</p>
+        <p>Компания Фаренгейт была основана в 2017 году и с тех пор занимается оптовыми и розничными продажами инженерных систем отопления, водоснабжения и водоотведения.</p>
 
         <h2>Наши преимущества</h2>
         <ul>
@@ -63,12 +71,18 @@
             <li>Быстрая доставка по России</li>
             <li>Акции и скидки для постоянных клиентов</li>
         </ul>
-        <a href="catalog.html" class="btn btn-outline-primary mt-3">Узнать больше</a>
+        <a href="#" class="btn btn-outline-primary mt-3" onclick="openPDF()">Узнать больше</a>
+
+        <script>
+            function openPDF() {
+                window.open('blank.pdf', '_blank', 'width=800,height=600');
+            }
+        </script>
     </div>
 </section>
 
 <!-- Футер -->
-<BR>
+<br>
 <footer class="text-center py-3">
     <div class="container">
         <p>&copy; 2024 Магазин сантехники Фаренгейт. Все права защищены.</p>
@@ -76,5 +90,25 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    let slides = document.querySelector('.slides');
+    let slideIndex = 0;
+    let slideCount = document.querySelectorAll('.slide').length;
+    const delay = 5000;  // Задержка между слайдами в миллисекундах
+
+    function showSlide() {
+        slideIndex++;
+        if (slideIndex >= slideCount) {
+            slideIndex = 0;  // Переход к первому слайду после последнего
+        }
+        slides.style.transition = "transform 1s ease-in-out";
+        slides.style.transform = `translateX(-${slideIndex * 100}%)`;
+    }
+
+    // Переключение слайдов с задержкой
+    setInterval(showSlide, delay);
+</script>
+
 </body>
 </html>

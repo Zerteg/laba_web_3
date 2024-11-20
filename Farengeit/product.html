@@ -26,24 +26,15 @@
             }
         }
 
-        .loading-text {
-            background: linear-gradient(to right, #f0f0f0 8%, #5555f0 18%, #f0f0f0 33%);
-            background-size: 800px 104px;
+        /* Стили для карточек товаров */
+        .card {
+            width: 18rem;
+            margin: 10px auto;
         }
 
-        /* Стили для placeholder'ов */
-        .loading-price {
-            background-color: #e0e0e0;
-            height: 40px;
-            width: 100px;
-            display: inline-block;
-            animation: shimmer 0.5s infinite;
-        }
-
-        .loading-block {
-            background-color: #e0e0e0;
-            height: 200px;
-            animation: shimmer 0.5s infinite;
+        .card img {
+            height: 150px;
+            object-fit: cover;
         }
     </style>
 </head>
@@ -70,35 +61,150 @@
     </div>
 </nav>
 
-    <!-- Заголовок страницы -->
-    <header class="bg-light text-center py-6">
-        <div class="container">
-            <h1>Загрузка информации о товаре...</h1>
-            <p>Пожалуйста, подождите, информация о товаре загружается</p>
-        </div>
-        <div class="container">
-            <div class="loader">
-                <div class="inner one"></div>
-                <div class="inner two"></div>
-                <div class="inner three"></div>
-            </div>
+<!-- Заголовок страницы -->
+<header class="bg-light text-center py-3">
+    <div class="container">
+        <h1 id="category-title">Загрузка категории...</h1>
+        <p>Информация о товарах</p>
     </div>
-    </header>
+</header>
 
-            <!-- Левая колонка с информацией -->
-    
+<!-- Секция с товарами -->
+<section class="container py-5">
+    <div id="items-container" class="row">
+        <!-- Карточки товаров будут загружены сюда -->
+    </div>
+</section>
+
+<!-- Футер -->
+<footer class="text-center py-3">
+    <div class="container">
+        <p>&copy; 2024 Магазин сантехники Фаренгейт. Все права защищены.</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<button class="cart-button" id="cartButton" onclick="goToCart()">
+    <span class="cart-icon">
+        🛒
+        <span id="cart-count" class="cart-count">0</span> <!-- Счетчик товаров в корзине -->
+    </span>
+</button>
 
 
-        
-    
-    <!-- Футер -->
-     <BR>
-    <footer class="text-center py-3">
-        <div class="container">
-            <p>&copy; 2024 Магазин сантехники Фаренгейт. Все права защищены.</p>
-        </div>
-    </footer>
+<script>
+    function goToCart() {
+        window.location.href = 'forms/cart.html';
+    }
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    // ID категории из URL
+    const params = new URLSearchParams(window.location.search);
+    const categoryId = params.get('id'); // Например, ?category=1
+    console.log(categoryId);
+
+    // Обновляем заголовок категории
+    const categoryTitle = document.getElementById('category-title');
+    categoryTitle.innerText = `Товары категории`;
+
+    // Контейнер для товаров
+    const itemsContainer = document.getElementById('items-container');
+
+    // Массив для хранения товаров в корзине
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function syncCart() {
+        cart = JSON.parse(localStorage.getItem('cart')) || [];
+        updateCartButton();
+    }
+
+    // Функция для добавления товара в корзину
+    function addToCart(item) {
+
+        cart = JSON.parse(localStorage.getItem('cart')) || []; // Обновляем массив из localStorage
+        const existingItemIndex = cart.findIndex(cartItem => cartItem.id === item.id);
+        if (existingItemIndex === -1) {
+            item.quantity = 1;
+            cart.push(item);
+        } else {
+            cart[existingItemIndex].quantity += 1;
+        }
+        localStorage.setItem('cart', JSON.stringify(cart)); // Сохраняем корзину
+        updateCartButton(); // Обновляем интерфейс
+    }
+
+
+    // Функция обновления кнопки корзины
+    function updateCartButton() {
+        cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartCount = document.getElementById('cart-count');
+        const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+        cartCount.innerText = totalItems; // Обновляем количество товаров в корзине
+
+        if (totalItems > 0) {
+            cartCount.style.display = 'inline'; // Показываем счетчик, если товары есть
+        } else {
+            cartCount.style.display = 'none'; // Скрываем счетчик, если корзина пуста
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', updateCartButton);
+
+
+    // Загружаем товары
+    async function loadItems(categoryId) {
+        try {
+            const token = localStorage.getItem('jwtToken');
+            const response = await fetch(`http://localhost:8080/protected/products/items/${categoryId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (!response.ok) throw new Error('Ошибка загрузки товаров');
+
+            const items = await response.json();
+            renderItems(items);
+        } catch (error) {
+            itemsContainer.innerHTML = `<p class="text-danger">Ошибка: ${error.message}</p>`;
+        }
+    }
+
+    // Рендерим карточки товаров
+    function renderItems(items) {
+        if (items.length === 0) {
+            itemsContainer.innerHTML = '<p>В данной категории пока нет товаров.</p>';
+            return;
+        }
+
+        items.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'col-md-4 mb-6';
+            card.innerHTML = `
+                <div class="card">
+                    <div class="d-flex justify-content-center" style="width: 100%; height: 250px;">
+                        <img src="${item.image_url}" class="card-img-top" alt="${item.title}">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">${item.title}</h5>
+                        <p class="card-text">Цена: ${item.price} ₽</p>
+                        <button class="btn btn-primary" onclick="addToCart(${JSON.stringify(item).replace(/"/g, "&quot;")})">Добавить в корзину</button>
+                    </div>
+                </div>
+            `;
+            itemsContainer.appendChild(card);
+        });
+    }
+
+    // Вызываем функцию загрузки товаров
+    if (categoryId) {
+        loadItems(categoryId);
+    } else {
+        itemsContainer.innerHTML = '<p class="text-danger">Ошибка: Категория не указана.</p>';
+    }
+
+    // Обновляем состояние корзины при загрузке страницы
+    updateCartButton();
+</script>
+
 </body>
 </html>

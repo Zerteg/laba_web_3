@@ -67,17 +67,22 @@
         localStorage.setItem('cart', JSON.stringify(cart));
     }
 
-    // Отображение корзины
+
+
+    // Рендеринг корзины
     function renderCart() {
+        console.log('Начало рендеринга корзины...');
         const cartItems = document.getElementById('cart-items');
         const cartTotal = document.getElementById('cart-total');
-        const cart = getCart();
+        const cart = getCart(); // Получаем текущую корзину из localStorage
 
-        // Очистка контейнера
-        cartItems.innerHTML = '';
+        console.log('Полученная корзина:', cart); // Проверяем содержимое корзины
+
+        cartItems.innerHTML = ''; // Очищаем элемент DOM
         let total = 0;
 
         if (cart.length === 0) {
+            console.log('Корзина пуста, обновляем DOM...');
             cartItems.innerHTML = '<p class="text-center">Корзина пуста.</p>';
             cartTotal.textContent = '0';
             return;
@@ -90,21 +95,42 @@
             const listItem = document.createElement('div');
             listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
             listItem.innerHTML = `
-                <div>
-                    <strong>${item.name}</strong> <small>(x${item.quantity})</small><br>
-                    <span>${item.price} ₽ / шт</span>
-                </div>
-                <div>
-                    <span class="text-success">${itemTotal} ₽</span>
-                    <button class="btn btn-sm btn-danger ms-3" onclick="removeFromCart(${item.id})">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </div>
-            `;
+            <div>
+                <strong>${item.title}</strong> <small>(x${item.quantity})</small><br>
+                <span>${item.price} ₽ / шт</span>
+            </div>
+            <div class="d-flex align-items-center">
+                <button class="btn btn-sm btn-secondary" onclick="updateQuantity(${item.id}, -1)">-</button>
+                <span class="mx-2" style="position: relative; top: -12px;">${item.quantity}</span>
+                <button class="btn btn-sm btn-secondary" onclick="updateQuantity(${item.id}, 1)">+</button>
+                <span class="text-success ms-3">${itemTotal} ₽</span>
+                <button class="btn btn-sm btn-danger ms-3" onclick="removeFromCart(${item.id})">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+        `;
             cartItems.appendChild(listItem);
         });
 
+        console.log('Общая сумма:', total);
         cartTotal.textContent = total.toFixed(2);
+    }
+
+
+    // Изменение количества товара
+    function updateQuantity(id, change) {
+        const cart = getCart();
+        const itemIndex = cart.findIndex(item => item.id === id);
+
+        if (itemIndex !== -1) {
+            cart[itemIndex].quantity += change;
+            if (cart[itemIndex].quantity <= 0) {
+                removeFromCart(id);
+            } else {
+                saveCart(cart);
+                renderCart();
+            }
+        }
     }
 
     // Удаление товара из корзины
@@ -115,11 +141,14 @@
         renderCart();
     }
 
-    // Очистка корзины
     function clearCart() {
         localStorage.removeItem('cart');
-        renderCart();
+        document.getElementById('cart-items').innerHTML = '<p class="text-center">Корзина пуста.</p>';
+        document.getElementById('cart-total').textContent = '0';
+        location.reload(); // Перезагрузка страницы
     }
+
+
 
     // Оформление заказа
     function checkout() {
@@ -127,8 +156,11 @@
         clearCart();
     }
 
-    // Отобразить корзину при загрузке страницы
-    document.addEventListener('DOMContentLoaded', renderCart);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        renderCart(); // Обновляем корзину при загрузке страницы
+    });
+
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

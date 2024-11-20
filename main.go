@@ -30,7 +30,7 @@ func main() {
 	router := gin.Default()
 
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"*"}, // Укажите origin, который будет использоваться
+		AllowOrigins:     []string{"http://localhost:63342"}, // Укажите origin, который будет использоваться
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 		AllowCredentials: true,
@@ -45,17 +45,22 @@ func main() {
 	}
 
 	// Миграция
-	DB.AutoMigrate(&models.User{}, &models.Product{}, &models.Feedback{})
+	DB.AutoMigrate(&models.User{}, &models.Product{}, &models.Item{}, &models.Feedback{})
 	middlewares.DB = DB // сохраняем подключение к базе данных в мидлваре
 
-	// Создаем объект контроллера с доступом к DB
+	// Создаем объект контроллеров с доступом к DB
 	ProductController := &controllers.ProductController{
+		DB: DB,
+	}
+
+	ItemController := &controllers.ItemController{
 		DB: DB,
 	}
 
 	feedbackController := &controllers.FeedbackController{
 		DB: DB,
 	}
+
 	// Публичные маршруты
 	router.POST("/register", controllers.RegisterUser)
 	router.POST("/login", controllers.LoginUser)
@@ -66,11 +71,15 @@ func main() {
 	protectedRoutes := router.Group("/protected")
 	protectedRoutes.Use(middlewares.AuthMiddleware()) // добавляем AuthMiddleware
 
-	// Защищенный маршрут для карточек товаров
+	// Защищенный маршрут для продуктов
 	protectedRoutes.GET("/products", ProductController.GetProducts)
+
+	// Защищенный маршрут для товаров в конкретной категории
+	protectedRoutes.GET("/products/items/:product_id", ItemController.GetItemsByCategory)
 
 	// Обработчик для статичных файлов (изображений)
 	protectedRoutes.Static("/media", "./media")
 
+	// Запуск сервера
 	router.Run(":8080")
 }

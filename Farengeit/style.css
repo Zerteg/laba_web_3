@@ -13,7 +13,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
-
 a {
     color: #007bff;
     text-decoration: none;
@@ -29,30 +28,28 @@ a:hover {
     background-color: #ffffff; /* Белый фон для чистоты и элегантности */
     border-bottom: 2px solid #e6e6e6;
     padding: 15px 0;
-    
+
 }
 
-.phone-number{
+.phone-number {
     color: #0972ea;
-    
+
     font-weight: bold;
     margin-bottom: 30px;
     margin-left: 30px;
-    
+
 }
 
-.email{
-    
+.email {
+
     text-decoration: underline;
     margin: 20px;
     margin-top: 0;
 }
 
-.icon{
+.icon {
     margin-top: 10px;
 }
-
-
 
 
 .navbar-brand img {
@@ -60,7 +57,7 @@ a:hover {
 }
 
 .navbar-nav .nav-link {
-    color: #003366; 
+    color: #003366;
     /* font-weight: bold; */
     font-size: 1rem;
     padding-left: 15px;
@@ -77,32 +74,36 @@ a:hover {
 }
 
 
-
 .navbar-nav .nav-link:hover {
     color: #ec2142; /* Подсветка при наведении */
 
 }
+
 .navbar-nav .nav-link i {
     margin-right: 7px; /* Отступ справа от иконки */
-    
+
 }
 
 .navbar-nav lii {
     margin-right: 10px; /* Отступ справа от иконки */
-    
+
 }
 
 .navbar-toggler {
     border-color: #0056b3;
 }
 
+
 .card {
     text-align: center; /* Центрирование текста в карточке */
 }
 
 .card-img-top {
-    max-width: 100%; /* Установить максимальную ширину изображения */
-    height: auto; /* Автоматическая высота для сохранения пропорций */
+    margin-top: 50px;
+    width: 140px;
+    height: 140px;
+    object-position: center;
+    object-fit: contain;
 }
 
 /* Стили для хедера */
@@ -116,6 +117,7 @@ header {
 }
 
 header h1 {
+
     font-size: 3rem;
     font-weight: 520;
     margin-bottom: 10px;
@@ -141,7 +143,7 @@ header p:hover {
     color: #ec2142; /* Тёмный цвет при наведении */
 }
 
-header k:hover{
+header k:hover {
     color: #3996f3; /* Тёмный цвет при наведении */
 }
 
@@ -155,7 +157,7 @@ header .btn {
 
 header .btn:hover {
     background-color: #135aa7;
-    text-decoration: none;  
+    text-decoration: none;
 }
 
 /* Основной контент */
@@ -170,7 +172,7 @@ section h2 {
     color: #000000;
     font-family: 'Playfair Display', serif;
     margin-bottom: 30px;
-     margin-top: 20px;
+    margin-top: 20px;
     font-size: 2rem;
     border-bottom: 2px solid #e6e6e6;
     padding-bottom: 10px;
@@ -214,7 +216,7 @@ section input {
     font-size: 1rem;
     border-bottom: 2px solid #e6e6e6;
     padding-bottom: 2px;
-} 
+}
 
 #search-icon {
     height: 100%; /* Подстраивает высоту значка под высоту input */
@@ -238,7 +240,7 @@ section button {
     padding-bottom: 2px;
 }
 
-section span{
+section span {
     color: #ff0000;
 }
 
@@ -314,6 +316,69 @@ footer p {
     }
 }
 
+
+
+
+/* Общий стиль для хедера */
+.slider-header {
+    position: relative;
+    overflow: hidden;
+    color: white;
+    text-shadow: 0px 0px 8px rgba(0, 0, 0, 0.8);
+    height: 300px; /* Высота хедера */
+}
+
+.slider-header .container {
+    position: relative;
+    z-index: 2; /* Чтобы текст был поверх изображений */
+}
+
+.slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.slides {
+    display: flex;
+    height: 100%;
+    width: 300%; /* Ширина для 3 слайдов */
+    animation: slide-animation 15s infinite; /* Увеличил время анимации для задержки */
+}
+
+.slide {
+    width: 100%;
+    height: 130%;
+    position: relative;
+}
+
+.slides img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: filter 1s ease; /* Плавный переход фильтра */
+}
+
+/* Эффект размытия на картинке */
+.slide img {
+    filter: blur(2px); /* Применение размытия */
+}
+
+/* Анимация для бесконечного переключения фона */
+@keyframes slide-animation {
+    0% { transform: translateX(0); }
+    33.33% { transform: translateX(-33.33%); }
+    52% { transform: translateX(-33.33%); }
+    66.66% { transform: translateX(-66.66%); }
+    80% { transform: translateX(-66.66%); } /* Задержка на последнем слайде */
+    100% { transform: translateX(0); }
+}
+
+
+
 .cart-button {
     position: fixed;
     bottom: 100px;
@@ -324,7 +389,7 @@ footer p {
     color: white;
     border: none;
     border-radius: 50%;
-    font-size: 24px;
+    font-size: 22px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -333,19 +398,18 @@ footer p {
     transition: background-color 0.3s ease-in-out;
 }
 
+
 .cart-button:hover {
     background-color: rgba(0, 123, 255, 0.68);
 }
 
 
-
 html {
     height: 100%;
-  }
-  
-  
-  
-  .loader {
+}
+
+
+.loader {
     position: relative;
     top: calc(60% - 32px);
     left: calc(50% - 32px);
@@ -354,64 +418,63 @@ html {
     border-radius: 50%;
     perspective: 800px;
     margin-top: 140px;
-  }
-  
+}
 
 
-  .inner {
+.inner {
     position: absolute;
     box-sizing: border-box;
     width: 100%;
     height: 100%;
-    border-radius: 50%;  
-  }
-  
-  .inner.one {
+    border-radius: 50%;
+}
+
+.inner.one {
     left: 0%;
     top: 0%;
     animation: rotate-one 1s linear infinite;
     border-bottom: 3px solid #0505ff;
-  }
-  
-  .inner.two {
+}
+
+.inner.two {
     right: 0%;
     top: 0%;
     animation: rotate-two 1s linear infinite;
     border-right: 3px solid #f60000;
-  }
-  
-  .inner.three {
+}
+
+.inner.three {
     right: 0%;
     bottom: 0%;
     animation: rotate-three 1s linear infinite;
     border-top: 3px solid #EFEFFA;
-  }
-  
-  @keyframes rotate-one {
+}
+
+@keyframes rotate-one {
     0% {
-      transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
+        transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
     }
     100% {
-      transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
+        transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
     }
-  }
-  
-  @keyframes rotate-two {
+}
+
+@keyframes rotate-two {
     0% {
-      transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
+        transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
     }
     100% {
-      transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
+        transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
     }
-  }
-  
-  @keyframes rotate-three {
+}
+
+@keyframes rotate-three {
     0% {
-      transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
+        transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
     }
     100% {
-      transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
+        transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
     }
-  }
+}
 
   
