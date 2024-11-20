@@ -69,8 +69,14 @@
     </div>
 </header>
 
-<!-- Секция с товарами -->
+<!-- Секция с поиском и товарами -->
 <section class="container py-5">
+    <div class="row mb-4">
+        <!-- Поле для поиска -->
+        <div class="col-md-6 offset-md-3">
+            <input type="text" id="search-input" class="form-control" placeholder="Поиск по товарам..." oninput="filterItems()">
+        </div>
+    </div>
     <div id="items-container" class="row">
         <!-- Карточки товаров будут загружены сюда -->
     </div>
@@ -92,7 +98,6 @@
     </span>
 </button>
 
-
 <script>
     function goToCart() {
         window.location.href = 'forms/cart.html';
@@ -109,6 +114,7 @@
 
     // Контейнер для товаров
     const itemsContainer = document.getElementById('items-container');
+    let allItems = []; // Массив для хранения всех товаров
 
     // Массив для хранения товаров в корзине
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -120,7 +126,6 @@
 
     // Функция для добавления товара в корзину
     function addToCart(item) {
-
         cart = JSON.parse(localStorage.getItem('cart')) || []; // Обновляем массив из localStorage
         const existingItemIndex = cart.findIndex(cartItem => cartItem.id === item.id);
         if (existingItemIndex === -1) {
@@ -132,7 +137,6 @@
         localStorage.setItem('cart', JSON.stringify(cart)); // Сохраняем корзину
         updateCartButton(); // Обновляем интерфейс
     }
-
 
     // Функция обновления кнопки корзины
     function updateCartButton() {
@@ -150,6 +154,14 @@
 
     document.addEventListener('DOMContentLoaded', updateCartButton);
 
+    // Функция фильтрации товаров
+    function filterItems() {
+        const searchQuery = document.getElementById('search-input').value.toLowerCase();
+        const filteredItems = allItems.filter(item =>
+            item.title.toLowerCase().includes(searchQuery) || item.description.toLowerCase().includes(searchQuery)
+        );
+        renderItems(filteredItems);
+    }
 
     // Загружаем товары
     async function loadItems(categoryId) {
@@ -162,8 +174,8 @@
             });
             if (!response.ok) throw new Error('Ошибка загрузки товаров');
 
-            const items = await response.json();
-            renderItems(items);
+            allItems = await response.json();
+            renderItems(allItems);
         } catch (error) {
             itemsContainer.innerHTML = `<p class="text-danger">Ошибка: ${error.message}</p>`;
         }
@@ -171,6 +183,7 @@
 
     // Рендерим карточки товаров
     function renderItems(items) {
+        itemsContainer.innerHTML = ''; // Очищаем контейнер перед рендером
         if (items.length === 0) {
             itemsContainer.innerHTML = '<p>В данной категории пока нет товаров.</p>';
             return;
@@ -201,10 +214,6 @@
     } else {
         itemsContainer.innerHTML = '<p class="text-danger">Ошибка: Категория не указана.</p>';
     }
-
-    // Обновляем состояние корзины при загрузке страницы
-    updateCartButton();
 </script>
-
 </body>
 </html>
