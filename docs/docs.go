@@ -213,6 +213,29 @@ const docTemplate = `{
                 }
             }
         },
+        "models.Item": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "product_id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Product": {
             "description": "Product object",
             "type": "object",
@@ -222,6 +245,13 @@ const docTemplate = `{
                 },
                 "image_url": {
                     "type": "string"
+                },
+                "items": {
+                    "description": "Связь с товарами",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Item"
+                    }
                 },
                 "title": {
                     "type": "string"
@@ -242,6 +272,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "password": {
+                    "type": "string"
+                },
+                "phone": {
                     "type": "string"
                 },
                 "username": {

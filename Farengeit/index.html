@@ -47,6 +47,9 @@
                 <img src="media/slider3.png" alt="Slide 3">
             </div>
         </div>
+        <!-- Кнопки управления -->
+        <button class="btn btn-primary slide-btn prev-btn" onclick="prevSlide()">&#9664;</button>
+        <button class="btn btn-primary slide-btn next-btn" onclick="nextSlide()">&#9654;</button>
     </div>
 </header>
 
@@ -72,7 +75,7 @@
             <li>Быстрая доставка по России</li>
             <li>Акции и скидки для постоянных клиентов</li>
         </ul>
-        <a href="#" class="btn btn-outline-primary mt-3" onclick="openPDF()">Узнать больше</a>
+        <a href="#" class="btn btn-outline-primary mt-3" onclick="openPDF()">Пользовательское соглашение</a>
 
         <script>
             function openPDF() {
@@ -96,21 +99,22 @@
     let slides = document.querySelector('.slides');
     let slideIndex = 0;
     let slideCount = document.querySelectorAll('.slide').length;
-    const delay = 5000;  // Задержка между слайдами в миллисекундах
 
-    function showSlide() {
-        slideIndex++;
-        if (slideIndex >= slideCount) {
-            slideIndex = 0;  // Переход к первому слайду после последнего
-        }
-        slides.style.transition = "transform 1s ease-in-out";
-        slides.style.transform = `translateX(-${slideIndex * 100}%)`;
+    function showSlide(index) {
+        slides.style.transition = "transform 0.5s ease-in-out";
+        slides.style.transform = `translateX(-${index * 100}%)`;
     }
 
-    // Переключение слайдов с задержкой
-    setInterval(showSlide, delay);
+    function nextSlide() {
+        slideIndex = (slideIndex + 1) % slideCount;
+        showSlide(slideIndex);
+    }
+
+    function prevSlide() {
+        slideIndex = (slideIndex - 1 + slideCount) % slideCount;
+        showSlide(slideIndex);
+    }
 </script>
 
 </body>
 </html>
-

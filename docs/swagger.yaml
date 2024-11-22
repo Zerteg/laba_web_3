@@ -22,6 +22,21 @@ definitions:
       name:
         type: string
     type: object
+  models.Item:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      image_url:
+        type: string
+      price:
+        type: number
+      product_id:
+        type: integer
+      title:
+        type: string
+    type: object
   models.Product:
     description: Product object
     properties:
@@ -29,6 +44,11 @@ definitions:
         type: integer
       image_url:
         type: string
+      items:
+        description: Связь с товарами
+        items:
+          $ref: '#/definitions/models.Item'
+        type: array
       title:
         type: string
     type: object
@@ -42,6 +62,8 @@ definitions:
       id:
         type: integer
       password:
+        type: string
+      phone:
         type: string
       username:
         type: string
